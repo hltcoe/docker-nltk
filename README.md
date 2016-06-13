@@ -66,5 +66,7 @@ The code for each analytic server (in the ```scripts/``` directory) has a ton of
 ## Further resources
 
 [Docker build file reference](https://docs.docker.com/engine/reference/builder/)
+
 [Docker Compose reference](https://docs.docker.com/compose/compose-file/)
+
 [Concrete data specification](https://github.com/hltcoe/concrete)
