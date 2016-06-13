@@ -11,7 +11,7 @@ The pipeline is composed of several Docker containers:
 
 Each container runs a single process, a server that implements the Concrete Thrift service *Annotator* on port 9090.  *Annotator* supports a method ```annotate :: Communication -> Communication```, and we call Docker containers like this an *Analytic*.  They accept Communications, and return them with some annotation.  In principle, any of these analytics could be used in isolation by passing Communications directly to it, but different analytics depend on preexisting annotations: the tagger has to know what the tokens are, the tokenizer has to know what the sentences are, and so forth.  Encoding these annotations in Concrete objects is a tedious process, so we'll create one more Docker container:
 
-5. Top-level composite analytic
+### Top-level composite analytic
 
 This container also implements the *Annotator* interface, but it's only job is to accept minimal Communications (e.g. where only the *text* field is filled in) and pass them through the other containers in the appropriate order.  We'll only expose this top-level container to the users, and so from their perspective it appears like a single analytic that provides four types of annotation.
 
@@ -47,7 +47,7 @@ PERSON Sue
 
 Note this *isn't* showing the full annotated communication, which now has sentence, token, part-of-speech, and named-entity information (this would be an *ugly* object) but you could easily modify ```scripts/concrete_annotator_client.py``` to see it.  Or to run in batch mode over a database of communications.  Or...
 
-## Running on the muinigrid
+## Running on the minigrid
 
 Doing all of this on the minigrid is basically identical, although if you want to make the pipeline accessible e.g. to your laptop, you will have to perform some port-forwarding.  This is out-of-scope, but if you use SSH aliases as described [here](https://gitlab.hltcoe.jhu.edu/mini-grid/wiki/wikis/ssh-tricks), you can log into the minigrid with something like:
 
@@ -59,4 +59,12 @@ and when you run the pipeline on ```r6n33```, you can access the pipeline at por
 
 ## Caveats and potential improvements
 
+This is a *tremendously simple* example: each container is actually the same Docker image, just running different server code.  This is because the analytics are all the default solutions from NLTK, and so the dependencies are identical.  However, since the analytics are decoupled, it would be easy to swap in a different e.g. part-of-speech tagger analytic that uses the same tag inventory.
+
+The code for each analytic server (in the ```scripts/``` directory) has a ton of duplication that could be factored out.  However, if your analytics were more diverse, this would be less the case: for example, in this pipeline none of the analytic servers need to be passed any arguments or model paths, but real-life analytics will need more involved initialization, might need special data manipulation, etc.  At the end of the day though, the *Annotator* interface is all the end-user should need to understand.
+
 ## Further resources
+
+[Docker build file reference](https://docs.docker.com/engine/reference/builder/)
+[Docker Compose reference](https://docs.docker.com/compose/compose-file/)
+[Concrete data specification](https://github.com/hltcoe/concrete)
