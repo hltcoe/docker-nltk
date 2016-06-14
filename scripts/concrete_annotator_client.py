@@ -54,7 +54,7 @@ if __name__ == "__main__":
                               entitySetList=[],
                               entityMentionSetList=[],
             )
-
+            
             new_c = client.annotate(c)
             for es in new_c.entitySetList:
                 for e in es.entityList:

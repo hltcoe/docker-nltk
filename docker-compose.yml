@@ -10,8 +10,6 @@ services:
     networks:
       - primary
     command: python /opt/scripts/sentence_splitter.py
-    ports:
-      - 9091:9090
       
   word.tokenizer:
     build:
@@ -21,8 +19,6 @@ services:
     networks:
       - primary
     command: python /opt/scripts/word_tokenizer.py
-    ports:
-      - 9092:9090
 
   pos.tagger:
     build:
@@ -32,8 +28,6 @@ services:
     networks:
       - primary
     command: python /opt/scripts/pos_tagger.py
-    ports:
-      - 9093:9090
   
   ne.chunker:
     build:
@@ -43,8 +37,6 @@ services:
     networks:
       - primary
     command: python /opt/scripts/ne_chunker.py
-    ports:
-      - 9094:9090
     
   ne.annotator:
     build:
@@ -59,6 +51,7 @@ services:
     depends_on:
       - sentence.splitter
       - word.tokenizer
+      - pos.tagger
       - ne.chunker
       
 networks:
