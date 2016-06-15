@@ -22,8 +22,8 @@ Assuming you have Docker, Docker Compose, and Git installed, building and runnin
 ```
 git clone https://gitlab.hltcoe.jhu.edu/lippincott/docker-nltk.git
 cd docker-nltk
-docker-compose build
-docker up
+docker-compose build --force-rm
+docker-compose up
 ```
 
 Now, you should have the top-level analytic listening on port 9090.
