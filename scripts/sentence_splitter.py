@@ -7,6 +7,7 @@ from concrete.util.concrete_uuid import AnalyticUUIDGeneratorFactory
 from thrift.transport import TSocket, TTransport
 from thrift.protocol import TCompactProtocol
 from thrift.server import TServer
+from thrift.server import TNonblockingServer
 
 import time
 import logging
@@ -43,9 +44,12 @@ if __name__ == "__main__":
     handler = CommunicationHandler()
     processor = Annotator.Processor(handler)
     transport = TSocket.TServerSocket(port=options.port)
-    tfactory = TTransport.TBufferedTransportFactory()
-    pfactory = TCompactProtocol.TCompactProtocolFactory()
+    #tfactory = TTransport.TBufferedTransportFactory()
+    #pfactory = TCompactProtocol.TCompactProtocolFactory()
+    ipfactory = TCompactProtocol.TCompactProtocolFactory()
+    opfactory = TCompactProtocol.TCompactProtocolFactory()
 
-    server = TServer.TSimpleServer(processor, transport, tfactory, pfactory)
+    server = TNonblockingServer.TNonblockingServer(processor, transport, ipfactory, opfactory)
+    #server = TNonblockingServer.TNonblockingServer(processor, transport, tfactory, pfactory)
     logging.info('Starting the server...')
     server.serve()

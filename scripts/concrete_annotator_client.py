@@ -6,7 +6,6 @@ from concrete.util.concrete_uuid import AnalyticUUIDGeneratorFactory
 from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.protocol import TCompactProtocol
-from thrift.server import TServer
 
 import re
 import time
@@ -22,9 +21,9 @@ if __name__ == "__main__":
 
     # Make socket
     transport = TSocket.TSocket(options.host, options.port)
-
+    transport = TTransport.TFramedTransport(transport)
     # Buffering is critical. Raw sockets are very slow
-    transport = TTransport.TBufferedTransport(transport)
+    #transport = TTransport.TBufferedTransport(transport)
 
     # Wrap in a protocol
     protocol = TCompactProtocol.TCompactProtocol(transport)

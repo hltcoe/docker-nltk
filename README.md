@@ -13,7 +13,9 @@ Each container runs a single process, a server that implements the Concrete Thri
 
 ### Top-level composite analytic
 
-This container also implements the *Annotator* interface, but it's only job is to accept minimal Communications (e.g. where only the *text* field is filled in) and pass them through the other containers in the appropriate order.  We'll only expose this top-level container to the users, and so from their perspective it appears like a single analytic that provides four types of annotation.
+This container also implements the *Annotator* interface, but it's only job is to accept minimal Communications (e.g. where only the *text* field is filled in) and pass them through the other containers in the appropriate order.  We'll only expose this top-level container as a service, and so from other applications' perspectives it appears like a single analytic that provides four types of annotation.
+
+Finally, there is a trivial web interface with a text box for the user to submit communications to the pipeline and display all named entities it finds.
 
 ## Building pipeline
 

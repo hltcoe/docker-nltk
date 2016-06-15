@@ -7,7 +7,7 @@ WORKDIR /tmp
 
 RUN yum update -y && \
     yum install epel-release -y && \
-    yum install -y git libtool make boost zlib-devel gcc-c++ byacc flex python-devel wget java-1.8.0-openjdk-devel protobuf-compiler maven patch which python-pip numpy && \
+    yum install -y git libtool make boost zlib-devel gcc-c++ byacc flex python-devel wget java-1.8.0-openjdk-devel protobuf-compiler maven patch which python-pip numpy python-bottle python-flask python-django && \
     yum clean all -y
 
 RUN git clone https://github.com/apache/thrift.git && \

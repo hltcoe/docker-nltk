@@ -53,6 +53,19 @@ services:
       - word.tokenizer
       - pos.tagger
       - ne.chunker
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.nltk_base
+    image: hltcoe/web
+    networks:
+      - primary
+    command: python /opt/scripts/run_ui.py
+    ports:
+      - 8080:8080
+    depends_on:
+      - ne.annotator
       
 networks:
   primary:
