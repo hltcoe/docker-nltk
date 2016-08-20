@@ -49,16 +49,6 @@ PERSON Sue
 
 Note this *isn't* showing the full annotated communication, which now has sentence, token, part-of-speech, and named-entity information (this would be an *ugly* object) but you could easily modify ```scripts/concrete_annotator_client.py``` to see it.  Or to run in batch mode over a database of communications.  Or...
 
-## Running on the minigrid
-
-Doing all of this on the minigrid is basically identical, although if you want to make the pipeline accessible e.g. to your laptop, you will have to perform some port-forwarding.  This is out-of-scope, but if you use SSH aliases as described [here](https://gitlab.hltcoe.jhu.edu/mini-grid/wiki/wikis/ssh-tricks), you can log into the minigrid with something like:
-
-```
-ssh r6n33 -L 9090:localhost:9090
-```
-
-and when you run the pipeline on ```r6n33```, you can access the pipeline at port 9090 on your local machine.
-
 ## Caveats and potential improvements
 
 This is a *tremendously simple* example: each container is actually the same Docker image, just running different server code.  This is because the analytics are all the default solutions from NLTK, and so the dependencies are identical.  However, since the analytics are decoupled, it would be easy to swap in a different e.g. part-of-speech tagger analytic that uses the same tag inventory.
