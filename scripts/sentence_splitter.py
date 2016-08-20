@@ -23,6 +23,7 @@ class CommunicationHandler():
             text = communication.text[section.textSpan.start:section.textSpan.ending]
             current_offset = section.textSpan.start            
             for sent in nltk.sent_tokenize(text):
+                logging.info("Found sentence %s", sent)
                 initial = text.find(sent)
                 s = Sentence(uuid=aug.next(),
                              textSpan=TextSpan(start=current_offset + initial, ending=current_offset + initial + len(sent)))

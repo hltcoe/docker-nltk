@@ -15,6 +15,7 @@ import nltk
 
 class CommunicationHandler():
     def annotate(self, communication):
+        print communication.id
         augf = AnalyticUUIDGeneratorFactory(communication)
         aug = augf.create()
         for section in communication.sectionList:
@@ -27,6 +28,7 @@ class CommunicationHandler():
                                                      metadata = AnnotationMetadata(timestamp=int(time.time()), tool="nltk"))
                                                      
                 for i, token in enumerate(nltk.word_tokenize(text)):
+                    logging.info("Found token %s", token)
                     sentence.tokenization.tokenList.tokenList.append(Token(tokenIndex=i, text=token))
         return communication
     
@@ -43,12 +45,9 @@ if __name__ == "__main__":
     handler = CommunicationHandler()
     processor = Annotator.Processor(handler)
     transport = TSocket.TServerSocket(port=options.port)
-    #tfactory = TTransport.TBufferedTransportFactory()
-    #pfactory = TCompactProtocol.TCompactProtocolFactory()
     ipfactory = TCompactProtocol.TCompactProtocolFactory()
     opfactory = TCompactProtocol.TCompactProtocolFactory()
 
     server = TNonblockingServer.TNonblockingServer(processor, transport, ipfactory, opfactory)
-    #server = TNonblockingServer.TNonblockingServer(processor, transport, tfactory, pfactory)
     logging.info('Starting the server...')
     server.serve()

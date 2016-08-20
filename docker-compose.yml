@@ -6,48 +6,46 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.nltk_base
-    image: hltcoe/nltk_base
-    networks:
-      - primary
+    image: nltk_base
     command: python /opt/scripts/sentence_splitter.py
+#    ports:
+#      - 9090
       
   word.tokenizer:
     build:
       context: .
       dockerfile: Dockerfile.nltk_base
-    image: hltcoe/nltk_base
-    networks:
-      - primary
+    image: nltk_base
     command: python /opt/scripts/word_tokenizer.py
+#    ports:
+#      - 9090
 
   pos.tagger:
     build:
       context: .
       dockerfile: Dockerfile.nltk_base
-    image: hltcoe/nltk_base
-    networks:
-      - primary
+    image: nltk_base
     command: python /opt/scripts/pos_tagger.py
+#    ports:
+#      - 9090
   
   ne.chunker:
     build:
       context: .
       dockerfile: Dockerfile.nltk_base
-    image: hltcoe/nltk_base
-    networks:
-      - primary
+    image: nltk_base
     command: python /opt/scripts/ne_chunker.py
+#    ports:
+#      - 9090
     
   ne.annotator:
     build:
       context: .
       dockerfile: Dockerfile.nltk_base
-    image: hltcoe/nltk_base
-    networks:
-      - primary
+    image: nltk_base
     command: python /opt/scripts/ne_annotator.py
-    ports:
-      - 9090:9090
+#    ports:
+#      - 9090
     depends_on:
       - sentence.splitter
       - word.tokenizer
@@ -59,13 +57,8 @@ services:
       context: .
       dockerfile: Dockerfile.nltk_base
     image: hltcoe/web
-    networks:
-      - primary
     command: python /opt/scripts/run_ui.py
     ports:
-      - 8080:8080
+      - 8080
     depends_on:
       - ne.annotator
-      
-networks:
-  primary:

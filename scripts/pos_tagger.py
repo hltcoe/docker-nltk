@@ -27,6 +27,7 @@ class CommunicationHandler():
                                                                            taggedTokenList=[],
                                                                            taggingType="Penn Treebank"))
                 for i, (tok, tag) in enumerate(nltk.pos_tag(tokens)):
+                    logging.info("Tagged %s as %s", tok, tag)
                     sentence.tokenization.tokenTaggingList[-1].taggedTokenList.append(TaggedToken(tokenIndex=i, tag=tag))
 
         return communication
@@ -44,10 +45,6 @@ if __name__ == "__main__":
     handler = CommunicationHandler()
     processor = Annotator.Processor(handler)
     transport = TSocket.TServerSocket(port=options.port)
-    #tfactory = TTransport.TBufferedTransportFactory()
-    #pfactory = TCompactProtocol.TCompactProtocolFactory()
-
-    #server = TNonblockingServer.TNonblockingServer(processor, transport, tfactory, pfactory)
     ipfactory = TCompactProtocol.TCompactProtocolFactory()
     opfactory = TCompactProtocol.TCompactProtocolFactory()
 

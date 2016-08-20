@@ -5,7 +5,6 @@ from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.protocol import TCompactProtocol
 
-import re
 import time
 
 from bottle import route, run, template, request
@@ -33,8 +32,9 @@ if __name__ == "__main__":
     @route('/', method='POST')
     def index():
         text = request.forms.get('text')
-        transport = TSocket.TSocket(options.annotator_host, options.annotator_port)
-        transport = TTransport.TFramedTransport(transport)
+        transport = TTransport.TFramedTransport(
+            TSocket.TSocket(options.annotator_host, options.annotator_port)
+        )
         protocol = TCompactProtocol.TCompactProtocol(transport)
         client = Annotator.Client(protocol)
         transport.open()

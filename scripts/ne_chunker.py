@@ -18,16 +18,15 @@ class CommunicationHandler():
         text = communication.text
         augf = AnalyticUUIDGeneratorFactory(communication)
         aug = augf.create()
-
-
         entities = {}
         for section in communication.sectionList:
             for sentence in section.sentenceList:
                 tokens = [x.text for x in sentence.tokenization.tokenList.tokenList]
-                tags = [x.tag for x in sentence.tokenization.tokenTaggingList[-1].taggedTokenList]                
+                tags = [x.tag for x in sentence.tokenization.tokenTaggingList[-1].taggedTokenList]
                 for subtree in nltk.ne_chunk(zip(tokens, tags)).subtrees():
                     if subtree.label() != "S":
                         name = " ".join([x[0] for x in subtree.leaves()])
+                        logging.info("Found named entity \"%s\"", name)
                         entities[(name, subtree.label())] = entities.get(name, []) + [EntityMention(uuid=aug.next(),
                                                                                                     entityType=subtree.label(),
                                                                                                     tokens=TokenRefSequence(tokenIndexList=[], tokenizationId=sentence.tokenization.uuid))]
@@ -59,11 +58,9 @@ if __name__ == "__main__":
     processor = Annotator.Processor(handler)
     transport = TSocket.TServerSocket(port=options.port)
     tfactory = TTransport.TBufferedTransportFactory()
-    #pfactory = TCompactProtocol.TCompactProtocolFactory()
     ipfactory = TCompactProtocol.TCompactProtocolFactory()
     opfactory = TCompactProtocol.TCompactProtocolFactory()
 
     server = TNonblockingServer.TNonblockingServer(processor, transport, ipfactory, opfactory)
-    #server = TNonblockingServer.TNonblockingServer(processor, transport, tfactory, pfactory)
     logging.info('Starting the server...')
     server.serve()

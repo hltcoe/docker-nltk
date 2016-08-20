@@ -1,34 +1,17 @@
-FROM centos:7
-ENV thrift_version=0.9.1 concrete_version=master
+FROM hltcoe/concrete
 MAINTAINER Tom Lippincott <tom.lippincott@gmail.com>
-LABEL Description="Base for HLTCOE workflow images"
+LABEL Description="Base for NLTK NER workflow"
 
 WORKDIR /tmp
 
-RUN yum update -y && \
-    yum install epel-release -y && \
-    yum install -y git libtool make boost zlib-devel gcc-c++ byacc flex python-devel wget java-1.8.0-openjdk-devel protobuf-compiler maven patch which python-pip numpy python-bottle python-flask python-django && \
-    yum clean all -y
+RUN yum install python-bottle numpy -y
 
-RUN git clone https://github.com/apache/thrift.git && \
-    cd thrift && \
-    git checkout ${thrift_version} && \
-    ./bootstrap.sh && \
-    ./configure --prefix=/home/dockeruser/local --without-python --without-java && \
-    make && \
-    make install && \
-    export PATH=${PATH}:/home/dockeruser/local/bin && \
-    cd lib/py && \
-    python setup.py install --user
-
-RUN git clone https://github.com/hltcoe/concrete.git && \
-    git clone https://github.com/hltcoe/concrete-python.git && \
-    export PATH=${PATH}:/home/dockeruser/local/bin && \
-    cd concrete-python && \
-    ./build.bash --raw && \
-    ./reinstall.bash
-
-RUN pip install nltk --user && \
+RUN pip install nltk && \
+    mkdir ~/nltk_data && \
+    mkdir ~/nltk_data/chunkers && \
+    mkdir ~/nltk_data/corpora && \
+    mkdir ~/nltk_data/taggers && \
+    mkdir ~/nltk_data/tokenizers && \
     python -c "import nltk; nltk.download(['punkt', 'averaged_perceptron_tagger', 'maxent_ne_chunker', 'words'])"
 
 COPY scripts /opt/scripts
